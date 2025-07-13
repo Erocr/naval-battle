@@ -10,6 +10,8 @@
     3. Water and rigid body contacts
     4. Damaging rigid bodies
 3. Gameplay spécifications
+    1. Game rules
+    2. Techniques
   
 ## 1. The 3D engine
 
@@ -56,7 +58,7 @@ orthogonal plane of $r_A$, with the size of $r_A$.
 
 We want to know the velocities after the impact.  
 
-$$j = \frac {-(1+e) v \cdot n} {n \cdot n (\frac 1 {m_A} + \frac 1 {m_B}) + I_A^{-1} \cdot (R_A \cdot n)^2 + I_B^{-1} \cdot (R_B \cdot n)^2}$$  
+$$j = \frac {-(1+e) v \cdot n} {n \cdot n (\frac 1 {m_A} + \frac 1 {m_B}) + I_A^{-1} (R_A \cdot n)^2 + I_B^{-1} (R_B \cdot n)^2}$$  
 
 Then, we can change the velocities of the bodies using the impulses:  
 $v_A$ += $\frac j {m_A} n$  
@@ -66,3 +68,41 @@ $t_B$ -= $I_B ^{-1} (R_B \cdot j n)$
 ($t_A$ is the torque and $v_A$ is the linear velocity.)  
 
 For further reading: https://www.chrishecker.com/Rigid_Body_Dynamics.
+
+#### 2.1.5 Frictions
+Only with that, the rigid bodies are pretty slippery. In fact, we need to add friction during the collisions.  
+The first question is, how do we stock this ? Normally, we use a friction table that describe the friction constants between two materials. Here, in order to simplify,
+we give some friction constants to each material. So, they have a staticFriction and a dynamicFriction, between 0 and 1. 
+
+
+## 2. Gameplay specifications
+
+It is a turn-based strategy. 
+
+### 2.1 Game rules
+
+#### 2.1.1 Placements
+There are 2 teams fighting. You control one of this two teams. Each team has 3 navigators and as many ships as they want (usually, there are 3 ships, one for each navigator).
+One of this ships has a gol, a little crystal.
+
+#### 2.1.2 Goal
+There are multiple ways to win. One way is to destroy the gol of the other team, or let it touch the floor under the water. This method is less valuable, but easyer to do. The other way is to steel the gol, and place it in your base.
+
+### 2.2 Techniques
+
+Each navigator is a wizard. Each navigator has a certain amount of mana. Using a power cost some mana. The cost vary proportionnaly to the distance with the caster, and the strength of the power used.
+
+#### 2.2.1 Base techniques
+Each navigator can use this techniques
+
+##### Telekinesis
+The navigator can apply a force to an object. Very useful to move the boat.
+
+#### 2.2.2 Alchemist
+An alchemist can transform the elements.
+
+#### 2.2.3 Runist
+A runist is someone who create and use runes.
+
+#### 2.2.4 Invoker
+An invoker can create things.
