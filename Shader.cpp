@@ -131,6 +131,11 @@ void Shader::putUniform(std::string variable_name, float v1, float v2, float v3,
 	glUniform4f(location, v1, v2, v3, v4);
 }
 
+void Shader::putUniform(std::string variable_name, glm::mat4 v) {
+	int location = glGetUniformLocation(program, variable_name.c_str());
+	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(v));
+}
+
 int size(GLenum type) {
 	switch (type) {
 	case GL_FLOAT: return sizeof(float);
@@ -168,5 +173,5 @@ void Shader::init(struct VertexAttributes* vertices, int number_vertices) {
 
 void Shader::test_in_loop() {
 	glBindVertexArray(VAO);
-	glDrawArrays(GL_TRIANGLES, 0, 3);
+	//glDrawArrays(GL_TRIANGLES, 0, 3);
 }

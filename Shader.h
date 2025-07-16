@@ -11,15 +11,14 @@
 #include <fstream>
 #include <vector>
 
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 
 class Shader {
 private:
 	GLuint program;
 	bool isActivated;
-
-	int stride;
-	std::vector<GLenum> types;
-	std::vector<int> sizes;
 
 	GLuint VAO;
 
@@ -33,6 +32,7 @@ public:
 	void putUniform(std::string variable_name, float v1, float v2);
 	void putUniform(std::string variable_name, float v1, float v2, float v3);
 	void putUniform(std::string variable_name, float v1, float v2, float v3, float v4);
+	void putUniform(std::string variable_name, glm::mat4 v);
 
 	void init(struct VertexAttributes* vertices, int number_vertices);
 
