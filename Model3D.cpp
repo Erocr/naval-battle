@@ -5,8 +5,6 @@ Model3D::Model3D(std::vector<Mesh*> meshes_) {
 	transform = glm::mat4(1.0);
 }
 
-
-
 void Model3D::translate(Vec3 v) {
 	transform = glm::translate(transform, glm::vec3(v.getX(), v.getY(), v.getZ()));
 }

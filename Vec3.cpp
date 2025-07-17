@@ -1,6 +1,7 @@
 #include "Vec3.h"
 #include <cmath>
 
+Vec3::Vec3() { x = 0; y = 0; z = 0; }
 Vec3::Vec3(float x_, float y_, float z_) { x = x_; y = y_; z = z_; }
 
 
@@ -29,6 +30,11 @@ Vec3 Vec3::operator/(Vec3 other) const {
 }
 Vec3 Vec3::operator/(float other) const { 
 	return Vec3(x / other, y / other, z / other); 
+}
+void Vec3::operator+=(Vec3 other) {
+	x = x + other.getX();
+	y = y + other.getY();
+	z = z + other.getZ();
 }
 
 

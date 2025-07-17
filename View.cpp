@@ -1,7 +1,6 @@
 #include "View.h"
 
 
-
 View::View() {
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         std::cerr << "SDL init error: " << SDL_GetError() << std::endl;
@@ -11,7 +10,7 @@ View::View() {
     window = SDL_CreateWindow("OpenGL Demo",
         SDL_WINDOWPOS_CENTERED,
         SDL_WINDOWPOS_CENTERED,
-        800, 600,
+        WIDTH, HEIGHT,
         SDL_WINDOW_OPENGL);
 
     if (!window) {
@@ -26,7 +25,7 @@ View::View() {
 
 void View::refresh() {
     SDL_GL_SwapWindow(window);
-    glClearColor(0.1f, 1, 0.3f, 1.0f);
+    glClearColor(0, 0, 0, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 }
 

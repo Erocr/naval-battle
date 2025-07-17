@@ -136,7 +136,12 @@ void Shader::putUniform(std::string variable_name, glm::mat4 v) {
 	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(v));
 }
 
-int size(GLenum type) {
+void Shader::putUniformT(std::string variable_name, glm::mat4 v) {
+	int location = glGetUniformLocation(program, variable_name.c_str());
+	glUniformMatrix4fv(location, 1, GL_TRUE, glm::value_ptr(v));
+}
+
+int sizeofGL(GLenum type) {
 	switch (type) {
 	case GL_FLOAT: return sizeof(float);
 	case GL_INT: return sizeof(int);
@@ -158,10 +163,12 @@ void Shader::init(struct VertexAttributes* vertices, int number_vertices) {
 	glBufferData(GL_ARRAY_BUFFER, sizeof(VertexAttributes)*number_vertices, vertices, GL_STATIC_DRAW);
 
 	size_t length = sizeof(SIZES_VERTEX_ATTR) / sizeof(int);
+	size_t tot_size = 0;
+	for (size_t i = 0; i < length; i++) { tot_size += SIZES_VERTEX_ATTR[i] * sizeofGL(TYPES_VERTEX_ATTR[i]); }
 	size_t offset = 0;
 	for (size_t i = 0; i < length; i++) {
-		int size = SIZES_VERTEX_ATTR[i] * sizeof(float);
-		glVertexAttribPointer(i, SIZES_VERTEX_ATTR[i], TYPES_VERTEX_ATTR[i], GL_FALSE, size, (void*)offset);
+		int size = SIZES_VERTEX_ATTR[i] * sizeofGL(TYPES_VERTEX_ATTR[i]);
+		glVertexAttribPointer(i, SIZES_VERTEX_ATTR[i], TYPES_VERTEX_ATTR[i], GL_FALSE, tot_size, (void*)offset);
 		glEnableVertexAttribArray(i);
 		offset += size;
 	}

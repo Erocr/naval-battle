@@ -33,6 +33,7 @@ public:
 	void putUniform(std::string variable_name, float v1, float v2, float v3);
 	void putUniform(std::string variable_name, float v1, float v2, float v3, float v4);
 	void putUniform(std::string variable_name, glm::mat4 v);
+	void putUniformT(std::string variable_name, glm::mat4 v);
 
 	void init(struct VertexAttributes* vertices, int number_vertices);
 

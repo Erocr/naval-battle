@@ -6,6 +6,7 @@ private:
 	float x, y, z;
 
 public:
+	Vec3();
 	Vec3(float x_, float y_, float z_);
 
 	// getters
@@ -22,6 +23,7 @@ public:
 	Vec3 operator*(float other) const;
 	Vec3 operator/(Vec3 other) const;
 	Vec3 operator/(float other) const;
+	void operator+=(Vec3 other);
 
 
 	// usefull functions
