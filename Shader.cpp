@@ -13,6 +13,8 @@ std::string read_file(std::string file_name) {
 	return res;
 }
 
+Shader::Shader() {}
+
 
 Shader::Shader(std::string vert_file_name, std::string frag_file_name) {
 

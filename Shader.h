@@ -24,6 +24,7 @@ private:
 
 public:
 	Shader(std::string vert_file_name, std::string frag_file_name);
+	Shader();
 
 	void activate();
 
