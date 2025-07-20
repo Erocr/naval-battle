@@ -36,6 +36,10 @@ void View::finalizeMeshes() {
     glm::mat4 persp = glm::perspective(PI / 2, double(WIDTH) / double(HEIGHT), 0.1, 1000.0);
     shader.putUniform("projection", persp);
     shader.putUniform("view", glm::mat4(1.0));
+    shader.putUniform("ambient", 0.2, 0.2, 0.2, 1);
+    shader.putUniform("nbLights", 1);
+    shader.putUniform("lightPos", { Vec3(0, 0, 0) });
+    shader.putUniform("lightColor", { Vec4(1, 1, 1, 1)});
     canAddMeshes = false;
 }
 

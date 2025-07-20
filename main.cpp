@@ -10,14 +10,13 @@ int main(int argc, char* argv[]) {
     View view = View();
     
     view.addMesh({
-        {{0.5f, -0.5f, 0.0f}, {0.0f, 1.0f, 0.0f, 1.0f}},
-        {{-0.5f, -0.5f, 0.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
-        {{ 0.0f,  0.5f, 0.0f}, {0.0f, 0.0f, 1.0f, 1.0f}}
+        {{0.5f, -0.5f, 0.0f}, {0.0f, 1.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f}},
+        {{-0.5f, -0.5f, 0.0f}, {1.0f, 0.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f}},
+        {{ 0.0f,  0.5f, 0.0f}, {0.0f, 0.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 1.0f}}
         }, "triangle");
 
     Model3D* triangle = view.addModel({ "triangle" });
     triangle->translate(Vec3(0, 0, -1));
-    triangle->rotateY(45);
 
     view.finalizeMeshes();
     
@@ -29,7 +28,7 @@ int main(int argc, char* argv[]) {
         auto duration = start.time_since_epoch();
         auto milliseconds_start = std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();
 
-        triangle->translate(Vec3(0.01, 0, 0));
+        //triangle->rotateY(6);
 
         inputs.update();
         view.draw();

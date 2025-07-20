@@ -133,6 +133,26 @@ void Shader::putUniform(std::string variable_name, float v1, float v2, float v3,
 	glUniform4f(location, v1, v2, v3, v4);
 }
 
+void Shader::putUniform(std::string variable_name, std::vector<float> v) {
+	int location = glGetUniformLocation(program, variable_name.c_str());
+	glUniform1fv(location, v.size(), v.data());
+}
+
+void Shader::putUniform(std::string variable_name, std::vector<Vec2> v) {
+	int location = glGetUniformLocation(program, variable_name.c_str());
+	glUniform1fv(location, v.size(), (float*) v.data());
+}
+
+void Shader::putUniform(std::string variable_name, std::vector<Vec3> v) {
+	int location = glGetUniformLocation(program, variable_name.c_str());
+	glUniform1fv(location, v.size(), (float*) v.data());
+}
+
+void Shader::putUniform(std::string variable_name, std::vector<Vec4> v) {
+	int location = glGetUniformLocation(program, variable_name.c_str());
+	glUniform1fv(location, v.size(), (float*) v.data());
+}
+
 void Shader::putUniform(std::string variable_name, glm::mat4 v) {
 	int location = glGetUniformLocation(program, variable_name.c_str());
 	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(v));

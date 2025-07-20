@@ -16,8 +16,9 @@
 struct VertexAttributes {
 	float aPos[3];
 	float color[4];
+	float normal[3];
 };
 
 
-const GLenum TYPES_VERTEX_ATTR[] = { GL_FLOAT, GL_FLOAT };
-const int SIZES_VERTEX_ATTR[] = { 3, 4 };
+const GLenum TYPES_VERTEX_ATTR[] = { GL_FLOAT, GL_FLOAT, GL_FLOAT };
+const int SIZES_VERTEX_ATTR[] = { 3, 4, 3 };

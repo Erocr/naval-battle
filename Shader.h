@@ -14,6 +14,10 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "Vec2.h"
+#include "Vec3.h"
+#include "Vec4.h"
+
 
 class Shader {
 private:
@@ -33,6 +37,10 @@ public:
 	void putUniform(std::string variable_name, float v1, float v2);
 	void putUniform(std::string variable_name, float v1, float v2, float v3);
 	void putUniform(std::string variable_name, float v1, float v2, float v3, float v4);
+	void putUniform(std::string variable_name, std::vector<float> v);
+	void putUniform(std::string variable_name, std::vector<Vec2> v);
+	void putUniform(std::string variable_name, std::vector<Vec3> v);
+	void putUniform(std::string variable_name, std::vector<Vec4> v);
 	void putUniform(std::string variable_name, glm::mat4 v);
 	void putUniformT(std::string variable_name, glm::mat4 v);
 
