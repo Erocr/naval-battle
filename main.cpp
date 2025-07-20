@@ -17,6 +17,7 @@ int main(int argc, char* argv[]) {
 
     Model3D* triangle = view.addModel({ "triangle" });
     triangle->translate(Vec3(0, 0, -1));
+    triangle->scale(Vec3(1, 1, 1));
 
     view.finalizeMeshes();
     
@@ -28,7 +29,7 @@ int main(int argc, char* argv[]) {
         auto duration = start.time_since_epoch();
         auto milliseconds_start = std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();
 
-        //triangle->rotateY(6);
+        triangle->rotateY(0.5);
 
         inputs.update();
         view.draw();

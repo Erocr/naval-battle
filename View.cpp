@@ -39,7 +39,7 @@ void View::finalizeMeshes() {
     shader.putUniform("ambient", 0.2, 0.2, 0.2, 1);
     shader.putUniform("nbLights", 1);
     shader.putUniform("lightPos", { Vec3(0, 0, 0) });
-    shader.putUniform("lightColor", { Vec4(1, 1, 1, 1)});
+    shader.putUniform("lightColor", { Vec4(1, 1, 1, 1) });
     canAddMeshes = false;
 }
 

@@ -41,10 +41,14 @@ Shader::Shader(std::string vert_file_name, std::string frag_file_name) {
 		GLint maxLength = 0;
 		glGetShaderiv(frag_shader, GL_INFO_LOG_LENGTH, &maxLength);
 
-		std::vector<GLchar> infoLog(maxLength);
-		glGetShaderInfoLog(frag_shader, maxLength, &maxLength, &infoLog[0]);
+		GLchar infoLog[100];
+		glGetShaderInfoLog(frag_shader, maxLength, &maxLength, infoLog);
+		printf("\nerreur de compilation dans le fragment shader (%i char):\n", maxLength);
+
+		std::cerr << infoLog;
 
 		glDeleteShader(frag_shader);
+		glDeleteShader(vert_shader);
 
 		exit(-1);
 	}
@@ -56,7 +60,7 @@ Shader::Shader(std::string vert_file_name, std::string frag_file_name) {
 		glGetShaderiv(vert_shader, GL_INFO_LOG_LENGTH, &maxLength);
 
 		GLchar infoLog[100];
-		glGetShaderInfoLog(vert_shader, maxLength, &maxLength, &infoLog[0]);
+		glGetShaderInfoLog(vert_shader, maxLength, &maxLength, infoLog);
 		printf("\nerreur de compilation dans le vertex shader (%i char):\n", maxLength);
 		
 		std::cerr << infoLog;
@@ -140,17 +144,17 @@ void Shader::putUniform(std::string variable_name, std::vector<float> v) {
 
 void Shader::putUniform(std::string variable_name, std::vector<Vec2> v) {
 	int location = glGetUniformLocation(program, variable_name.c_str());
-	glUniform1fv(location, v.size(), (float*) v.data());
+	glUniform2fv(location, v.size(), (float*) v.data());
 }
 
 void Shader::putUniform(std::string variable_name, std::vector<Vec3> v) {
 	int location = glGetUniformLocation(program, variable_name.c_str());
-	glUniform1fv(location, v.size(), (float*) v.data());
+	glUniform3fv(location, v.size(), (float*) v.data());
 }
 
 void Shader::putUniform(std::string variable_name, std::vector<Vec4> v) {
 	int location = glGetUniformLocation(program, variable_name.c_str());
-	glUniform1fv(location, v.size(), (float*) v.data());
+	glUniform4fv(location, v.size(), (float*)v.data());
 }
 
 void Shader::putUniform(std::string variable_name, glm::mat4 v) {

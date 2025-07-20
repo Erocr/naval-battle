@@ -21,6 +21,7 @@ public:
 	void rotateY(float angle);
 	void rotateZ(float angle);
 	void rotate(Vec3 angles);
+	void scale(Vec3 values);
 
 	void draw(Shader shader) const;
 };

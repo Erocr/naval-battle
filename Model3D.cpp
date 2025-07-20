@@ -29,6 +29,9 @@ void Model3D::rotate(Vec3 angles) {
 	rotateZ(angles.getZ());
 }
 
+void Model3D::scale(Vec3 values) {
+	transform = glm::scale(transform, glm::vec3(values.getX(), values.getY(), values.getZ()));
+}
 
 void Model3D::draw(Shader shader) const {
 	shader.putUniform("model", transform);
