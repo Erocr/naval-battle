@@ -8,11 +8,14 @@ void InputManager::update() {
 		switch (event.type) {
 		case SDL_KEYDOWN:
 			events.emplace(event.key.keysym.scancode, event.key.timestamp);
+			break;
 		case SDL_KEYUP:
 			if (is_pressed(event.key.keysym.scancode))
 				events.erase(event.key.keysym.scancode);
+			break;
 		case SDL_QUIT:
 			quit = true;
+			break;
 		}
 	}
 }

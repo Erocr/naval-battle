@@ -13,6 +13,7 @@
 #include "constants.h"
 #include "Shader.h"
 #include "Model3D.h"
+#include "Camera.h"
 
 
 class View {
@@ -26,6 +27,8 @@ private:
 	std::map<std::string, Mesh*> meshes;
 	bool canAddMeshes = true;
 
+	Camera cam;
+
 
 public:
 	View();
@@ -38,4 +41,10 @@ public:
 
 	void addMesh(std::vector<VertexAttributes> vertices, std::string name);
 	Model3D* addModel(std::vector<std::string> mesh_names);
+
+	void translateCam(Vec3 v) { cam.translate(v); }
+	void rotateCamX(float angle) { cam.rotateX(angle); }
+	void rotateCamY(float angle) { cam.rotateY(angle); }
+	void rotateCamZ(float angle) { cam.rotateZ(angle); }
+	void rotateCam(Vec3 angles) { cam.rotate(angles); }
 };

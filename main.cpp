@@ -10,9 +10,9 @@ int main(int argc, char* argv[]) {
     View view = View();
     
     view.addMesh({
-        {{0.5f, -0.5f, 0.0f}, {0.0f, 1.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f}},
-        {{-0.5f, -0.5f, 0.0f}, {1.0f, 0.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f}},
-        {{ 0.0f,  0.5f, 0.0f}, {0.0f, 0.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 1.0f}}
+        {{0.5f, -0.5f, 0.0f}, {1.0f, 1.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f}},
+        {{-0.5f, -0.5f, 0.0f}, {1.0f, 1.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f}},
+        {{ 0.0f,  0.5f, 0.0f}, {1.0f, 1.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f}}
         }, "triangle");
 
     Model3D* triangle = view.addModel({ "triangle" });
@@ -32,6 +32,17 @@ int main(int argc, char* argv[]) {
         triangle->rotateY(0.5);
 
         inputs.update();
+
+        if (inputs.is_pressed(SDL_SCANCODE_W)) {
+            view.translateCam(Vec3(0, 0, 0.01));
+        } if (inputs.is_pressed(SDL_SCANCODE_S)) {
+            view.translateCam(Vec3(0, 0, -0.01));
+        } if (inputs.is_pressed(SDL_SCANCODE_A)) {
+            view.translateCam(Vec3(0.01, 0, 0));
+        } if (inputs.is_pressed(SDL_SCANCODE_D)) {
+            view.translateCam(Vec3(-0.01, 0, 0));
+        }
+
         view.draw();
 
         i++;
