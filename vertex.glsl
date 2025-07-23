@@ -2,6 +2,7 @@
 
 uniform mat4 model;
 uniform mat4 view;
+uniform mat4 view_inv;
 uniform mat4 projection;
 
 layout(location = 0) in vec3 aPos;
@@ -16,10 +17,13 @@ void main()
 {
     pos = (model * vec4(aPos, 1.0)).xyz;
 
-    gl_Position = projection * view * vec4(pos, 1.0);
+    gl_Position = projection * view_inv * vec4(pos, 1.0);
     //gl_Position.xyz /= gl_Position.w;
 
-    normal_frag = (model * vec4(normal, 0.0)).xyz;
     vertexColor = color;
+    normal_frag = (model * vec4(normal, 0.0)).xyz;
+    if (dot(normal_frag, (view_inv * vec4(pos, 1)).xyz) > 0) {
+        normal_frag = -normal_frag;
+    }
 
 }

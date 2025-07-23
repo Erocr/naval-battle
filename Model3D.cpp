@@ -6,9 +6,8 @@ Model3D::Model3D(std::vector<Mesh*> meshes_) {
 }
 
 void Model3D::translate(Vec3 v) {
-	glm::mat4 translation = glm::mat4(1.0);
-	translation = glm::translate(translation, glm::vec3(v.getX(), v.getY(), v.getZ()));
-	transform = translation * transform;
+	glm::mat4 translate = glm::translate(glm::mat4(1.0), glm::vec3(v.getX(), v.getY(), v.getZ()));
+	transform = transform * translate;
 }
 
 void Model3D::rotateX(float angle) {

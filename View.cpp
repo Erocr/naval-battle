@@ -19,6 +19,7 @@ View::View() {
     }
 
     glContext = SDL_GL_CreateContext(window);
+    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
     glewInit();
 
@@ -40,6 +41,8 @@ void View::finalizeMeshes() {
     shader.putUniform("nbLights", 1);
     shader.putUniform("lightPos", { Vec3(0, 0, 0) });
     shader.putUniform("lightColor", { Vec4(1, 1, 1, 1) });
+
+    glEnable(GL_DEPTH_TEST);
     canAddMeshes = false;
 }
 
@@ -48,7 +51,7 @@ void View::refresh() {
     cam.update(shader);
     SDL_GL_SwapWindow(window);
     glClearColor(0, 0, 0, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void View::quit() {

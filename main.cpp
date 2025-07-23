@@ -8,7 +8,7 @@
 int main(int argc, char* argv[]) {
     InputManager inputs = InputManager();
     View view = View();
-    
+
     view.addMesh({
         {{0.5f, -0.5f, 0.0f}, {1.0f, 1.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f}},
         {{-0.5f, -0.5f, 0.0f}, {1.0f, 1.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f}},
@@ -18,9 +18,11 @@ int main(int argc, char* argv[]) {
     Model3D* triangle = view.addModel({ "triangle" });
     triangle->translate(Vec3(0, 0, -1));
     triangle->scale(Vec3(1, 1, 1));
+    Model3D* light = view.addModel({ "triangle" });
+    light->scale(Vec3(0.5, 0.5, 1));
 
     view.finalizeMeshes();
-    
+
 
     size_t i = 0;
 
@@ -34,13 +36,17 @@ int main(int argc, char* argv[]) {
         inputs.update();
 
         if (inputs.is_pressed(SDL_SCANCODE_W)) {
-            view.translateCam(Vec3(0, 0, 0.01));
+            view.translateCam(Vec3(0, 0, -0.02));
         } if (inputs.is_pressed(SDL_SCANCODE_S)) {
-            view.translateCam(Vec3(0, 0, -0.01));
+            view.translateCam(Vec3(0, 0, 0.02));
         } if (inputs.is_pressed(SDL_SCANCODE_A)) {
-            view.translateCam(Vec3(0.01, 0, 0));
+            view.translateCam(Vec3(-0.02, 0, 0));
         } if (inputs.is_pressed(SDL_SCANCODE_D)) {
-            view.translateCam(Vec3(-0.01, 0, 0));
+            view.translateCam(Vec3(0.02, 0, 0));
+        } if (inputs.is_pressed(SDL_SCANCODE_Q)) {
+            view.rotateCamY(1);
+        } if (inputs.is_pressed(SDL_SCANCODE_E)) {
+            view.rotateCamY(-1);
         }
 
         view.draw();

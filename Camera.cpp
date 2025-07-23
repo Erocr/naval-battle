@@ -7,12 +7,12 @@ Camera::Camera() {
 
 void Camera::update(Shader shader) {
 	shader.putUniform("view", transform);
+	shader.putUniform("view_inv", glm::inverse(transform));
 }
 
 void Camera::translate(Vec3 v) {
-	glm::mat4 translation = glm::mat4(1.0);
-	translation = glm::translate(translation, glm::vec3(v.getX(), v.getY(), v.getZ()));
-	transform = translation * transform;
+	glm::mat4 translate = glm::translate(glm::mat4(1.0), glm::vec3(v.getX(), v.getY(), v.getZ()));
+	transform = transform * translate;
 }
 
 void Camera::rotateX(float angle) {
