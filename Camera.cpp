@@ -6,8 +6,9 @@ Camera::Camera() {
 }
 
 void Camera::update(Shader shader) {
-	shader.putUniform("view_inv_t", glm::transpose(glm::inverse(transform)));
-	shader.putUniform("view_inv", glm::inverse(transform));
+	glm::mat4 inverse = glm::inverse(transform);
+	shader.putUniform("view", transform);
+	shader.putUniform("view_inv", inverse);
 }
 
 void Camera::translate(Vec3 v) {

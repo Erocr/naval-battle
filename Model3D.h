@@ -12,7 +12,6 @@ class Model3D {
 private:
 	std::vector<Mesh*> meshes;
 	glm::mat4 transform;
-	glm::mat4 transform_inv_t;
 
 public:
 	Model3D(std::vector<Mesh*> meshes_);

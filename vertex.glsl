@@ -2,7 +2,7 @@
 
 uniform mat4 model;
 uniform mat4 model_inv_t;
-uniform mat4 view_inv_t;
+uniform mat4 view;
 uniform mat4 view_inv;
 uniform mat4 projection;
 
@@ -23,8 +23,8 @@ void main()
 
     vertexColor = color;
     normal_frag = (model_inv_t * vec4(normal, 0.0)).xyz;
-    vec3 view_dir = (view_inv_t * vec4(0, 0, -1, 0)).xyz;
-    if (dot(normal_frag, view_dir) > 0) {
+    vec3 pixelDir = pos - (view * vec4(0, 0, 0, 1)).xyz;
+    if (dot(normal_frag, pixelDir) > 0) {
         normal_frag = -normal_frag;
     }
 

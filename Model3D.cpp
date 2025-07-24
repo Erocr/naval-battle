@@ -3,7 +3,6 @@
 Model3D::Model3D(std::vector<Mesh*> meshes_) {
 	meshes = meshes_;
 	transform = glm::mat4(1.0);
-	transform_inv_t = glm::mat4(1.0);
 }
 
 void Model3D::translate(Vec3 v) {
