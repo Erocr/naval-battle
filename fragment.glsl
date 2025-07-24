@@ -16,10 +16,9 @@ void main() {
     vec3 normalized_normal = normalize(normal_frag);
     fragColor = ambient * vertexColor;
     for (int i=0; i < nbLights && i < 10; i++) {
-        float strength = abs(dot(normalized_normal, normalize(lightPos[i]-pos)));
+        float strength = dot(normalized_normal, normalize(lightPos[i]-pos));
         if (strength < 0) {
             strength = 0;
-            fragColor = vec4(1, 1, 1, 1);
         }
         float dist = distance(pos, lightPos[i]) * 2;
         if (dist < 1) dist = 1;

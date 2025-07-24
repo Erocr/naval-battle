@@ -2,6 +2,7 @@
 
 
 View::View() {
+    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         std::cerr << "SDL init error: " << SDL_GetError() << std::endl;
         exit(-1);
@@ -19,7 +20,6 @@ View::View() {
     }
 
     glContext = SDL_GL_CreateContext(window);
-    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
     glewInit();
 

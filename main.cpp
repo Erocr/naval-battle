@@ -19,7 +19,7 @@ int main(int argc, char* argv[]) {
     triangle->translate(Vec3(0, 0, -1));
     triangle->scale(Vec3(1, 1, 1));
     Model3D* light = view.addModel({ "triangle" });
-    light->scale(Vec3(0.5, 0.5, 1));
+    light->scale(Vec3(0.1, 0.1, 1));
 
     view.finalizeMeshes();
 
