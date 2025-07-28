@@ -15,10 +15,10 @@
 
 struct VertexAttributes {
 	float aPos[3];
-	float color[4];
 	float normal[3];
+	float texCoord[2];
 };
 
 
 const GLenum TYPES_VERTEX_ATTR[] = { GL_FLOAT, GL_FLOAT, GL_FLOAT };
-const int SIZES_VERTEX_ATTR[] = { 3, 4, 3 };
+const int SIZES_VERTEX_ATTR[] = { 3, 3, 2 };

@@ -23,6 +23,7 @@ private:
 	Shader shader;
 	VertexAttributes* buffer;
 	size_t buffer_pos;
+	std::map<std::string, GLuint> textures;
 	std::vector<Model3D*> models;
 	std::map<std::string, Mesh*> meshes;
 	bool canAddMeshes = true;
@@ -39,7 +40,8 @@ public:
 	void refresh();
 	void draw();
 
-	void addMesh(std::vector<VertexAttributes> vertices, std::string name);
+	void addMesh(std::vector<VertexAttributes> vertices, std::string name, std::string texture_file_name);
+	std::vector<std::string> loadMeshes(std::string obj_file_name, std::string mtl_file_name, std::string name);
 	Model3D* addModel(std::vector<std::string> mesh_names);
 
 	void translateCam(Vec3 v) { cam.translate(v); }

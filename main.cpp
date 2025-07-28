@@ -10,16 +10,16 @@ int main(int argc, char* argv[]) {
     View view = View();
 
     view.addMesh({
-        {{0.5f, -0.5f, 0.0f}, {1.0f, 1.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f}},
-        {{-0.5f, -0.5f, 0.0f}, {1.0f, 1.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f}},
-        {{ 0.0f,  0.5f, 0.0f}, {1.0f, 1.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f}}
-        }, "triangle");
-
-    Model3D* triangle = view.addModel({ "triangle" });
-    triangle->translate(Vec3(0, 0, -1));
-    triangle->scale(Vec3(1, 1, 1));
+        {{0.5f, -0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}, {1.0f, 0.0f}},
+        {{-0.5f, -0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}, {0.0f, 0.0f}},
+        {{ 0.0f,  0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}, {0.5f, 1.0f}}
+        }, "triangle", "textures/wood-texture.png");
+    auto teapotRef = view.loadMeshes("3d_models/teapot/model.obj", "3d_models/teapot", "teapot");
     Model3D* light = view.addModel({ "triangle" });
-    light->scale(Vec3(0.1, 0.1, 1));
+    light->setAffectedByLight(false);
+    light->scale(Vec3(0.4, 0.4, 1));
+    Model3D* teapot = view.addModel(teapotRef);
+    teapot->translate(Vec3(0, 0, -1));
 
     view.finalizeMeshes();
 
@@ -31,7 +31,7 @@ int main(int argc, char* argv[]) {
         auto duration = start.time_since_epoch();
         auto milliseconds_start = std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();
 
-        triangle->rotateY(0.5);
+        teapot->rotateY(1);
 
         inputs.update();
 

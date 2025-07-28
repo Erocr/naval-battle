@@ -3,6 +3,7 @@
 Model3D::Model3D(std::vector<Mesh*> meshes_) {
 	meshes = meshes_;
 	transform = glm::mat4(1.0);
+	affectedByLight = true;
 }
 
 void Model3D::translate(Vec3 v) {
@@ -33,9 +34,18 @@ void Model3D::scale(Vec3 values) {
 }
 
 void Model3D::draw(Shader shader) const {
+	shader.putUniform("affectedByLight", affectedByLight);
 	shader.putUniform("model", transform);
 	shader.putUniform("model_inv_t", glm::transpose(glm::inverse(transform)));
 	for (const Mesh *mesh: meshes) {
 		(*mesh).draw();
 	}
+}
+
+bool Model3D::isAffectedByLight() const {
+	return affectedByLight;
+}
+
+void Model3D::setAffectedByLight(bool v) {
+	affectedByLight = v;
 }

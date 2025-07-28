@@ -32,6 +32,8 @@ public:
 
 	void activate();
 
+	GLuint load_image(std::string file_name);
+
 	void putUniform(std::string variable_name, int v);
 	void putUniform(std::string variable_name, float v);
 	void putUniform(std::string variable_name, float v1, float v2);

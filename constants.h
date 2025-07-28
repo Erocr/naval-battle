@@ -6,4 +6,4 @@ constexpr double PI = 3.14159265358979323846264338327950288419716939937510582097
 constexpr size_t WIDTH = 800;
 constexpr size_t HEIGHT = 600;
 
-constexpr size_t VERTICES_BUFFER_SIZE = 3;
+constexpr size_t VERTICES_BUFFER_SIZE = 8192;

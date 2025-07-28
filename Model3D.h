@@ -12,6 +12,7 @@ class Model3D {
 private:
 	std::vector<Mesh*> meshes;
 	glm::mat4 transform;
+	bool affectedByLight;
 
 public:
 	Model3D(std::vector<Mesh*> meshes_);
@@ -22,6 +23,10 @@ public:
 	void rotateZ(float angle);
 	void rotate(Vec3 angles);
 	void scale(Vec3 values);
+
+	bool isAffectedByLight() const;
+
+	void setAffectedByLight(bool v);
 
 	void draw(Shader shader) const;
 };

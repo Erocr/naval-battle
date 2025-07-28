@@ -1,4 +1,6 @@
 #include "View.h"
+#define TINYOBJLOADER_IMPLEMENTATION
+#include "tiny_obj_loader.h"
 
 
 View::View() {
@@ -28,6 +30,7 @@ View::View() {
 
     models = std::vector<Model3D*>();
     meshes = std::map<std::string, Mesh*>();
+    textures = std::map<std::string, GLuint>();
 
     buffer_pos = 0;
     cam = Camera();
@@ -69,13 +72,71 @@ void View::draw() {
 }
 
 
-void View::addMesh(std::vector<VertexAttributes> vertices, std::string name) {
+void View::addMesh(std::vector<VertexAttributes> vertices, std::string name, std::string texture_file_name) {
     if (not canAddMeshes) {
         std::cerr << "Adding a mesh after that the call of finalizeMeshes" << std::endl;
         exit(-1);
     }
-    meshes.insert({ name, new Mesh(vertices, buffer_pos, buffer) });
+    if (textures.find(texture_file_name) == textures.end()) {
+        textures.insert({ texture_file_name, shader.load_image(texture_file_name) });
+    }
+    meshes.insert({ name, new Mesh(vertices, buffer_pos, buffer, textures.at(texture_file_name)) });
     buffer_pos += vertices.size();
+}
+
+std::vector<std::string> View::loadMeshes(std::string obj_file_name, std::string mtl_file_name, std::string name) {
+    tinyobj::attrib_t attributes;
+    std::vector<tinyobj::shape_t> shapes;
+    std::vector<tinyobj::material_t> materials;
+    std::string warnings;
+    std::string errors;
+    bool success = tinyobj::LoadObj(&attributes, &shapes, &materials, &warnings, &errors, obj_file_name.c_str(), mtl_file_name.c_str());
+    if (warnings != "") {
+        std::cerr << "Warning in loading " << name << ':' << std::endl << warnings << std::endl;
+    }
+    if (!success) {
+        std::cerr << "Can't load " << obj_file_name << ':' << std::endl << errors << std::endl;
+        exit(-2);
+    }
+    
+    std::vector<std::vector<VertexAttributes>> vertices = std::vector<std::vector<VertexAttributes>>(materials.size());
+    // There is a array of groups of vertices. Each group of vertices is associated to a material.
+    for (int i = 0; i < shapes.size(); i++) {
+        tinyobj::shape_t& shape = shapes[i];
+        tinyobj::mesh_t& mesh = shape.mesh;
+        for (int j = 0; j < mesh.indices.size(); j++) {
+            tinyobj::index_t i = mesh.indices[j];
+            float texCoordX, texCoordY;
+            if (i.texcoord_index == -1) { texCoordX = 0; texCoordY = 0; }
+            else {
+                texCoordX = attributes.vertices[i.texcoord_index * 2];
+                texCoordY = attributes.vertices[i.texcoord_index * 2 + 1];
+            }
+            VertexAttributes vert = { 
+                {
+                    attributes.vertices[i.vertex_index * 3],
+                    attributes.vertices[i.vertex_index * 3 + 1],
+                    attributes.vertices[i.vertex_index * 3 + 2] }, 
+                {
+                    attributes.vertices[i.normal_index * 3],
+                    attributes.vertices[i.normal_index * 3 + 1],
+                    attributes.vertices[i.normal_index * 3 + 2] }, 
+                { texCoordX, texCoordY}
+            };
+            vertices[mesh.material_ids[j/3]].push_back(vert);
+        }
+    }
+
+    std::vector<std::string> meshes = std::vector<std::string>(0);
+    for (int i = 0; i < vertices.size(); i++) {
+        std::string meshName = name + std::to_string(i);
+        std::string tex_file_name = materials[i].diffuse_texname;
+        if (tex_file_name == "") tex_file_name = "textures/white.jpg";
+        addMesh(vertices[i], meshName, tex_file_name);
+        meshes.push_back(meshName);
+    }
+
+    return meshes;
 }
 
 Model3D* View::addModel(std::vector<std::string> mesh_names) {

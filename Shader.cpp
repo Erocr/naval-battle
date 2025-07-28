@@ -1,6 +1,9 @@
 #include "Shader.h"
 #include <iostream>
 
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image.h>
+
 std::string read_file(std::string file_name) {
 	std::ifstream file;
 	file.open(file_name);
@@ -103,6 +106,32 @@ Shader::Shader(std::string vert_file_name, std::string frag_file_name) {
 	isActivated = false;
 
 	printf("finished \n");
+}
+
+
+GLuint Shader::load_image(std::string file_name) {
+	GLuint res;
+	glGenTextures(1, &res);
+	glBindTexture(GL_TEXTURE_2D, res);
+	int width, height, nrChannels;
+	unsigned char* data = stbi_load(file_name.data(), &width, &height, &nrChannels, 0);
+	if (data)
+	{
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		int format = (nrChannels == 4) ? GL_RGBA : GL_RGB;
+		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else
+	{
+		std::cerr << "Failed to load " << file_name << std::endl;
+		exit(-2);
+	}
+	stbi_image_free(data);
+	return res;
 }
 
 
