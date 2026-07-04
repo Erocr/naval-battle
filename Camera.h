@@ -20,4 +20,6 @@ public:
 	void rotate(Vec3);
 
 	void update(Shader shader);
+
+	Vec3 getPos();
 };

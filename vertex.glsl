@@ -20,7 +20,6 @@ void main()
     pos = (model * vec4(aPos, 1.0)).xyz;
 
     gl_Position = projection * view_inv * vec4(pos, 1.0);
-    //gl_Position.xy /= gl_Position.w;
 
     normal_frag = (model_inv_t * vec4(normal, 0.0)).xyz;
     playerPos = (view * vec4(0, 0, 0, 1)).xyz;

@@ -33,3 +33,7 @@ void Camera::rotate(Vec3 angles) {
 	rotateY(angles.getY());
 	rotateZ(angles.getZ());
 }
+
+Vec3 Camera::getPos() {
+	return Vec3(transform[3].x, transform[3].y, transform[3].z);
+}

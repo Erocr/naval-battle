@@ -1,5 +1,6 @@
 #version 330 core
 
+uniform vec3 camPos;
 uniform vec4 ambient;
 uniform int nbLights;
 uniform vec3 lightPos[10];
@@ -25,17 +26,23 @@ void main() {
         if (dot(normal_frag, pixelDir) > 0) {
             //normal = -normal;
         }
+        vec3 view_dir = normalize(camPos - pos);
         vec3 normalized_normal = normalize(normal);
         fragColor = ambient * color;
         for (int i=0; i < nbLights && i < 10; i++) {
-            float strength = dot(normalized_normal, normalize(lightPos[i]-pos));
-            //strength = 1;
+            vec3 light_dir = normalize(lightPos[i]-pos);
+            float diff_strength = dot(normalized_normal, light_dir);
             vec4 lColor = lightColor[i];
-            if (strength < 0) strength = 0;
             float dist = distance(pos, lightPos[i]);
             if (dist < 1) 
                 dist = 1;
-            fragColor += strength / dist * lColor * color;
+            if (diff_strength < 0) diff_strength = 0;
+            fragColor += diff_strength / dist * lColor * color;
+
+            vec3 H = normalize(view_dir + light_dir);
+            float spec_strength = dot(H, normalized_normal);
+            spec_strength = pow(spec_strength, 64);
+            fragColor += spec_strength * lColor * color;
         }
     } else {
         fragColor = color;

@@ -17,15 +17,16 @@ int main(int argc, char* argv[]) {
         {{ 0.0f,  0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}, {0.5f, 1.0f}}
         }, "triangle", "textures/wood-texture.png");
     auto teapotRef = view.loadMeshes("3d_models/teapot/model.obj", "3d_models/teapot", "teapot");
-    Model3D* light = view.addModel({ "triangle" });
+    //Model3D* light = view.addModel({ "triangle" });
 
-    light->setAffectedByLight(false);
-    light->scale(Vec3(0.4, 0.4, 1));
+    //light->setAffectedByLight(false);
+    //light->scale(Vec3(0.4, 0.4, 1));
 
     Model3D* teapot = view.addModel(teapotRef);
-    teapot->translate(Vec3(0, 0, -1));
+    teapot->translate(Vec3(0, 0, -3));
 
     view.addLight(Vec3(0, 0, 0), Vec4(1, 1, 1, 1));
+    //view.addLight(Vec3(3, 0, -3), Vec4(1, 1, 0, 1));
     view.finalizeMeshes();
     std::cout << "finished" << std::endl;
 

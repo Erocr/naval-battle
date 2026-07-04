@@ -80,6 +80,8 @@ void View::quit() {
 }
 
 void View::draw() {
+    Vec3 camPos = cam.getPos();
+    shader.putUniform("camPos", camPos.getX(), camPos.getY(), camPos.getZ());
     shader.test_in_loop();
     for (Model3D* model : models) {
         model->draw(shader);
