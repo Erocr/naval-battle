@@ -9,6 +9,8 @@ int main(int argc, char* argv[]) {
     InputManager inputs = InputManager();
     View view = View();
 
+    
+    std::cout << "loading meshes ... ";
     view.addMesh({
         {{0.5f, -0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}, {1.0f, 0.0f}},
         {{-0.5f, -0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}, {0.0f, 0.0f}},
@@ -16,12 +18,16 @@ int main(int argc, char* argv[]) {
         }, "triangle", "textures/wood-texture.png");
     auto teapotRef = view.loadMeshes("3d_models/teapot/model.obj", "3d_models/teapot", "teapot");
     Model3D* light = view.addModel({ "triangle" });
+
     light->setAffectedByLight(false);
     light->scale(Vec3(0.4, 0.4, 1));
+
     Model3D* teapot = view.addModel(teapotRef);
     teapot->translate(Vec3(0, 0, -1));
 
+    view.addLight(Vec3(0, 0, 0), Vec4(1, 1, 1, 1));
     view.finalizeMeshes();
+    std::cout << "finished" << std::endl;
 
 
     size_t i = 0;
@@ -31,7 +37,8 @@ int main(int argc, char* argv[]) {
         auto duration = start.time_since_epoch();
         auto milliseconds_start = std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();
 
-        teapot->rotateY(1);
+        if (inputs.is_pressed(SDL_SCANCODE_T))
+            teapot->rotateY(1);
 
         inputs.update();
 

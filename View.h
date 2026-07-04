@@ -14,6 +14,7 @@
 #include "Shader.h"
 #include "Model3D.h"
 #include "Camera.h"
+#include "Light.h"
 
 
 class View {
@@ -27,6 +28,8 @@ private:
 	std::vector<Model3D*> models;
 	std::map<std::string, Mesh*> meshes;
 	bool canAddMeshes = true;
+
+	std::vector<Light> lights;
 
 	Camera cam;
 
@@ -49,4 +52,7 @@ public:
 	void rotateCamY(float angle) { cam.rotateY(angle); }
 	void rotateCamZ(float angle) { cam.rotateZ(angle); }
 	void rotateCam(Vec3 angles) { cam.rotate(angles); }
+
+	void updateLights();
+	Light* addLight(Vec3 pos, Vec4 color);
 };
