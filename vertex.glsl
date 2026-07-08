@@ -13,7 +13,6 @@ layout(location = 2) in vec2 atexCoord;
 out vec3 normal_frag;
 out vec3 pos;
 out vec2 texCoord;
-out vec3 playerPos;
 
 void main()
 {
@@ -22,6 +21,5 @@ void main()
     gl_Position = projection * view_inv * vec4(pos, 1.0);
 
     normal_frag = (model_inv_t * vec4(normal, 0.0)).xyz;
-    playerPos = (view * vec4(0, 0, 0, 1)).xyz;
     texCoord = atexCoord;
 }

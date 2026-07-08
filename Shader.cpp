@@ -183,7 +183,7 @@ void Shader::putUniform(std::string variable_name, std::vector<Vec3> v) {
 
 void Shader::putUniform(std::string variable_name, std::vector<Vec4> v) {
 	int location = glGetUniformLocation(program, variable_name.c_str());
-	glUniform4fv(location, v.size(), (float*)v.data());
+	glUniform4fv(location, v.size(), (float*) v.data());
 }
 
 void Shader::putUniform(std::string variable_name, glm::mat4 v) {

@@ -33,6 +33,10 @@ void Model3D::scale(Vec3 values) {
 	transform = glm::scale(transform, glm::vec3(values.getX(), values.getY(), values.getZ()));
 }
 
+void Model3D::scale(float value) {
+	transform = glm::scale(transform, glm::vec3(value, value, value));
+}
+
 void Model3D::draw(Shader shader) const {
 	shader.putUniform("affectedByLight", affectedByLight);
 	shader.putUniform("model", transform);

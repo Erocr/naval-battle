@@ -13,7 +13,6 @@ out vec4 fragColor;
 in vec3 normal_frag;
 in vec3 pos;
 in vec2 texCoord;
-in vec3 playerPos;
 
 uniform sampler2D theTexture;
 
@@ -21,10 +20,11 @@ uniform sampler2D theTexture;
 void main() {
     vec4 color = texture(theTexture, texCoord);
     if (affectedByLight) {
-        vec3 pixelDir = pos - playerPos;
+        vec3 pixelDir = pos - camPos;
         vec3 normal = normal_frag;
+
         if (dot(normal_frag, pixelDir) > 0) {
-            //normal = -normal;
+            normal = -normal;
         }
         vec3 view_dir = normalize(camPos - pos);
         vec3 normalized_normal = normalize(normal);
@@ -36,13 +36,15 @@ void main() {
             float dist = distance(pos, lightPos[i]);
             if (dist < 1) 
                 dist = 1;
-            if (diff_strength < 0) diff_strength = 0;
+            if (diff_strength < 0) {
+                diff_strength = 0;
+            }
             fragColor += diff_strength / dist * lColor * color;
 
             vec3 H = normalize(view_dir + light_dir);
             float spec_strength = dot(H, normalized_normal);
-            spec_strength = pow(spec_strength, 64);
-            fragColor += spec_strength * lColor * color;
+            spec_strength = pow(spec_strength, 128);
+            fragColor += spec_strength / dist * lColor * color * 0.3;
         }
     } else {
         fragColor = color;

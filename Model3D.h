@@ -23,6 +23,7 @@ public:
 	void rotateZ(float angle);
 	void rotate(Vec3 angles);
 	void scale(Vec3 values);
+	void scale(float value);
 
 	bool isAffectedByLight() const;
 

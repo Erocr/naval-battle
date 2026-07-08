@@ -40,13 +40,13 @@ View::View() {
 
 
 void View::updateLights() {
-    shader.putUniform("nbLights", 1);
     std::vector<Vec3> lightPos = std::vector<Vec3>(0);
     std::vector<Vec4> lightCol = std::vector<Vec4>(0);
     for (Light light : lights) {
         lightPos.push_back(light.pos);
         lightCol.push_back(light.color);
     }
+    shader.putUniform("nbLights", (int)lights.size());
     shader.putUniform("lightPos", lightPos);
     shader.putUniform("lightColor", lightCol);
 }
@@ -120,13 +120,16 @@ std::vector<std::string> View::loadMeshes(std::string obj_file_name, std::string
         std::cerr << std::endl << "Can't load " << obj_file_name << ':' << std::endl << errors << std::endl;
         exit(-2);
     }
-    if (materials.size() == 0) {
-        std::cerr << std::endl << "Warning in loading: can't load because no materials have been found." << std::endl;
-    }
 
     
+    if (materials.size() == 0) {
+        tinyobj::material_t default_mat = tinyobj::material_t();
+        materials.push_back(default_mat);
+    }
+
     std::vector<std::vector<VertexAttributes>> vertices = std::vector<std::vector<VertexAttributes>>(materials.size());
     // This is an array of groups of vertices. Each group of vertices is associated to a material.
+
     for (size_t i = 0; i < shapes.size(); i++) {
         tinyobj::shape_t& shape = shapes[i];
         tinyobj::mesh_t& mesh = shape.mesh;
@@ -146,9 +149,29 @@ std::vector<std::string> View::loadMeshes(std::string obj_file_name, std::string
                 normalZ = attributes.normals[i.normal_index * 3 + 2];
             }
             else {
-                normalX = 0;
-                normalY = 0;
-                normalZ = -1;
+                Vec3 p1 = Vec3(attributes.vertices[i.vertex_index * 3],
+                    attributes.vertices[i.vertex_index * 3 + 1],
+                    attributes.vertices[i.vertex_index * 3 + 2]);
+
+                size_t k;
+                if (j % 3 == 2) k = j - 2;
+                else k = j + 1;
+                tinyobj::index_t i_t = mesh.indices[k];
+                Vec3 p2 = Vec3(attributes.vertices[i_t.vertex_index * 3],
+                    attributes.vertices[i_t.vertex_index * 3 + 1],
+                    attributes.vertices[i_t.vertex_index * 3 + 2]);
+
+                if (k % 3 == 2) k = k - 2;
+                else k = k + 1;
+                i_t = mesh.indices[k];
+                Vec3 p3 = Vec3(attributes.vertices[i_t.vertex_index * 3],
+                    attributes.vertices[i_t.vertex_index * 3 + 1],
+                    attributes.vertices[i_t.vertex_index * 3 + 2]);
+
+                Vec3 normal = cross(p2 - p1, p3 - p1);
+                normalX = normal.getX();
+                normalY = normal.getY();
+                normalZ = normal.getZ();
             }
 
             VertexAttributes vert = { 
@@ -159,7 +182,10 @@ std::vector<std::string> View::loadMeshes(std::string obj_file_name, std::string
                 { normalX, normalY, normalZ }, 
                 { texCoordX, texCoordY }
             };
-            vertices[mesh.material_ids[j/3]].push_back(vert);
+            if (mesh.material_ids[j / 3] == -1)
+                vertices[0].push_back(vert);
+            else
+                vertices[mesh.material_ids[j / 3]].push_back(vert);
         }
     }
 
