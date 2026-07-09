@@ -11,7 +11,7 @@
 #include <map>
 
 #include "constants.h"
-#include "Shader.h"
+#include "VertFragShader.h"
 #include "Model3D.h"
 #include "Camera.h"
 #include "Light.h"
@@ -21,7 +21,7 @@ class View {
 private:
 	SDL_Window *window;
 	SDL_GLContext glContext;
-	Shader shader;
+	VertFragShader shader;
 	VertexAttributes* buffer;
 	size_t buffer_pos;
 	std::map<std::string, GLuint> textures;

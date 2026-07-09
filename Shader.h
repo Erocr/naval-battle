@@ -26,10 +26,12 @@ private:
 
 	GLuint VAO;
 
-public:
-	Shader(std::string vert_file_name, std::string frag_file_name);
-	Shader();
+protected:
+	std::string read_file(std::string file_name);
+	GLuint importShader(std::string file_name, int type);
+	int sizeofGL(GLenum type);
 
+public:
 	void activate();
 
 	GLuint load_image(std::string file_name);
@@ -45,8 +47,4 @@ public:
 	void putUniform(std::string variable_name, std::vector<Vec4> v);
 	void putUniform(std::string variable_name, glm::mat4 v);
 	void putUniformT(std::string variable_name, glm::mat4 v);
-
-	void init(struct VertexAttributes* vertices, int number_vertices);
-
-	void test_in_loop();
 };

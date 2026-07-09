@@ -25,7 +25,7 @@ View::View() {
 
     glewInit();
 
-    shader = Shader("vertex.glsl", "fragment.glsl");
+    shader = VertFragShader("vertex.glsl", "fragment.glsl");
     buffer = (VertexAttributes*)malloc(sizeof(VertexAttributes) * VERTICES_BUFFER_SIZE);
 
     models = std::vector<Model3D*>();
@@ -82,7 +82,6 @@ void View::quit() {
 void View::draw() {
     Vec3 camPos = cam.getPos();
     shader.putUniform("camPos", camPos.getX(), camPos.getY(), camPos.getZ());
-    shader.test_in_loop();
     for (Model3D* model : models) {
         model->draw(shader);
     }
