@@ -28,14 +28,46 @@ View::View() {
     shader = Shader("vertex.glsl", "fragment.glsl");
     buffer = (VertexAttributes*)malloc(sizeof(VertexAttributes) * VERTICES_BUFFER_SIZE);
 
+    buffer[0] = { {-1, -1, 0}, {0, 0, 0}, {0, 0} };
+    buffer[1] = { { 1, -1, 0}, {0, 0, 0}, {0, 0} };
+    buffer[2] = { {-1,  1, 0}, {0, 0, 0}, {0, 0} };
+    buffer[3] = { { 1, -1, 0}, {0, 0, 0}, {0, 0} };
+    buffer[4] = { {-1,  1, 0}, {0, 0, 0}, {0, 0} };
+    buffer[5] = { { 1,  1, 0}, {0, 0, 0}, {0, 0} };
+
     models = std::vector<Model3D*>();
     meshes = std::map<std::string, Mesh*>();
     textures = std::map<std::string, GLuint>();
 
-    buffer_pos = 0;
+    buffer_pos = 6;
     cam = Camera();
 
     lights = std::vector< Light > (0);
+
+    sdfShader = Shader("emptyVertex.glsl", "sdf_fragment.glsl");
+    glGenTextures(1, &color_buffer);
+    glBindTexture(GL_TEXTURE_2D, color_buffer);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, WIDTH, HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+    glGenFramebuffers(1, &fbo1);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo1);
+    glFramebufferTexture2D(
+        GL_FRAMEBUFFER,
+        GL_COLOR_ATTACHMENT0,
+        GL_TEXTURE_2D,
+        color_buffer,
+        0);
+
+    GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    assert(status == GL_FRAMEBUFFER_COMPLETE);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 
@@ -80,12 +112,39 @@ void View::quit() {
 }
 
 void View::draw() {
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo1);
+    glViewport(0, 0, WIDTH, HEIGHT);
+
+    glClearColor(0, 0, 0, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    shader.activate();
+
     Vec3 camPos = cam.getPos();
     shader.putUniform("camPos", camPos.getX(), camPos.getY(), camPos.getZ());
-    shader.test_in_loop();
     for (Model3D* model : models) {
         model->draw(shader);
     }
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glViewport(0, 0, WIDTH, HEIGHT);
+
+    glDisable(GL_DEPTH_TEST);
+    glDisable(GL_CULL_FACE);
+    glDisable(GL_BLEND);
+
+    sdfShader.activate();
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, color_buffer);
+    sdfShader.putUniform("previousColor", 0);
+
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+
+    //glBindFramebuffer(GL_READ_FRAMEBUFFER, fbo1);
+    //glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+    //glBlitFramebuffer(0, 0, WIDTH, HEIGHT, 0, 0, WIDTH, HEIGHT, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+
     refresh();
 }
 

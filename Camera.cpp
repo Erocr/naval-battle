@@ -1,4 +1,5 @@
 #include "Camera.h"
+#include <iostream>
 
 
 Camera::Camera() {
@@ -6,6 +7,7 @@ Camera::Camera() {
 }
 
 void Camera::update(Shader shader) {
+	shader.activate();
 	glm::mat4 inverse = glm::inverse(transform);
 	shader.putUniform("view", transform);
 	shader.putUniform("view_inv", inverse);

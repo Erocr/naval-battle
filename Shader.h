@@ -24,8 +24,6 @@ private:
 	GLuint program;
 	bool isActivated;
 
-	GLuint VAO;
-
 public:
 	Shader(std::string vert_file_name, std::string frag_file_name);
 	Shader();
@@ -48,5 +46,5 @@ public:
 
 	void init(struct VertexAttributes* vertices, int number_vertices);
 
-	void test_in_loop();
+	GLuint getProgram() { return program; }
 };

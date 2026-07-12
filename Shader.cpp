@@ -20,7 +20,6 @@ Shader::Shader() {}
 
 
 Shader::Shader(std::string vert_file_name, std::string frag_file_name) {
-
 	printf("compiling shaders ...  ");
 	std::string vert_source_s = read_file(vert_file_name);
 	std::string frag_source_s = read_file(frag_file_name);
@@ -209,7 +208,8 @@ int sizeofGL(GLenum type) {
 
 void Shader::init(struct VertexAttributes* vertices, int number_vertices) {
 	unsigned int VBO;
-	glGenVertexArrays(1, &VAO);
+	GLuint VAO;
+	glGenVertexArrays(1, &VAO); 
 	glGenBuffers(1, &VBO);
 
 	glBindVertexArray(VAO);
@@ -229,11 +229,4 @@ void Shader::init(struct VertexAttributes* vertices, int number_vertices) {
 	}
 
 	activate();
-}
-
-
-
-void Shader::test_in_loop() {
-	glBindVertexArray(VAO);
-	//glDrawArrays(GL_TRIANGLES, 0, 3);
 }

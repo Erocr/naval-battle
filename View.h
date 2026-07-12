@@ -22,6 +22,7 @@ private:
 	SDL_Window *window;
 	SDL_GLContext glContext;
 	Shader shader;
+
 	VertexAttributes* buffer;
 	size_t buffer_pos;
 	std::map<std::string, GLuint> textures;
@@ -31,8 +32,12 @@ private:
 
 	std::vector<Light> lights;
 
-	Camera cam;
+	Shader sdfShader;
+	GLuint color_buffer;
+	GLuint fbo1;
+	GLuint depth_buffer;
 
+	Camera cam;
 
 public:
 	View();
