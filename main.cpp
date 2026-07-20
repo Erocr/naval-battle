@@ -16,17 +16,13 @@ int main(int argc, char* argv[]) {
         {{-0.5f, -0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}, {0.0f, 0.0f}},
         {{ 0.0f,  0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}, {0.5f, 1.0f}}
         }, "triangle", "textures/wood-texture.png");
-    auto ratRef = view.loadMeshes("3d_models_raw/lowpolyrat/rat.obj", "3d_models/teapot", "rat");
-    auto teapotRef = view.loadMeshes("3d_models/teapot/model.obj", "3d_models/teapot/model.mtl", "teapot");
+    auto sphereRef = view.loadMeshes("3d_models_raw/sphere/source/anim8or sphere.obj", "3d_models/teapot", "rat");
 
-    Model3D* rat = view.addModel(ratRef);
-    rat->translate(Vec3(0, -0.2, -2));
-    rat->scale(0.01);
+    Model3D* sphere = view.addModel(sphereRef);
+    sphere->translate(Vec3(0, 0, -3));
+    sphere->scale(3/2);
 
-    Model3D* teapot = view.addModel(teapotRef);
-    teapot->translate(Vec3(2, 0, -2));
-
-    view.addLight(Vec3(0, 0, 0), Vec4(1, 1, 1, 1));
+    view.addLight(Vec3(0, 0, 0), Vec4(1, 0, 0, 1));
     view.finalizeMeshes();
     std::cout << "finished" << std::endl;
 
@@ -38,8 +34,9 @@ int main(int argc, char* argv[]) {
         auto duration = start.time_since_epoch();
         auto milliseconds_start = std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();
 
-        if (inputs.is_pressed(SDL_SCANCODE_T))
-            rat->rotateY(1);
+        if (inputs.is_pressed(SDL_SCANCODE_T)) {
+            //rat->rotateY(1);
+        }
 
         inputs.update();
 

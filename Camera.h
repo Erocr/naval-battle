@@ -9,6 +9,7 @@
 class Camera {
 private:
 	glm::mat4 transform;
+	float rotY;
 
 public:
 	Camera();
@@ -19,7 +20,7 @@ public:
 	void rotateZ(float angle);
 	void rotate(Vec3);
 
-	void update(Shader shader);
+	void update(Shader shader, Shader shader2);
 
 	Vec3 getPos();
 };

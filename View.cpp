@@ -54,6 +54,18 @@ View::View() {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
+    glGenTextures(1, &depth_buffer);
+    glBindTexture(GL_TEXTURE_2D, depth_buffer);
+    glTexImage2D(
+        GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, WIDTH, HEIGHT, 0,
+        GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, NULL
+    );
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
     glGenFramebuffers(1, &fbo1);
 
     glBindFramebuffer(GL_FRAMEBUFFER, fbo1);
@@ -62,6 +74,13 @@ View::View() {
         GL_COLOR_ATTACHMENT0,
         GL_TEXTURE_2D,
         color_buffer,
+        0);
+
+    glFramebufferTexture2D(
+        GL_FRAMEBUFFER,
+        GL_DEPTH_STENCIL_ATTACHMENT,
+        GL_TEXTURE_2D,
+        depth_buffer,
         0);
 
     GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
@@ -78,18 +97,39 @@ void View::updateLights() {
         lightPos.push_back(light.pos);
         lightCol.push_back(light.color);
     }
+
+    shader.activate();
     shader.putUniform("nbLights", (int)lights.size());
     shader.putUniform("lightPos", lightPos);
     shader.putUniform("lightColor", lightCol);
+
+    sdfShader.activate();
+    sdfShader.putUniform("nbLights", (int)lights.size());
+    sdfShader.putUniform("lightPos", lightPos);
+    sdfShader.putUniform("lightColor", lightCol);
+
+    shader.activate();
 }
 
 
 void View::finalizeMeshes() {
     shader.init(buffer, VERTICES_BUFFER_SIZE);
-    glm::mat4 persp = glm::perspective(PI / 2, double(WIDTH) / double(HEIGHT), 0.1, 1000.0);
+    double fov = PI / 2;
+    double near_ = 0.1;
+    double far_ = 1000.0;
+    glm::mat4 persp = glm::perspective(fov, double(WIDTH) / double(HEIGHT), near_, far_);
     shader.putUniform("projection", persp);
     shader.putUniform("ambient", 0.2, 0.2, 0.2, 1);
     updateLights();
+
+    sdfShader.activate();
+    sdfShader.putUniform("fov", (float) fov);
+    sdfShader.putUniform("near", (float) near_);
+    sdfShader.putUniform("far", (float) far_);
+    sdfShader.putUniform("screenAspectRatio", float(WIDTH) / float(HEIGHT));
+    sdfShader.putUniform("projectionInverse", glm::inverse(persp));
+    sdfShader.putUniform("ambient", 0.2, 0.2, 0.2, 1);
+
 
     glEnable(GL_DEPTH_TEST);
     canAddMeshes = false;
@@ -99,7 +139,7 @@ void View::finalizeMeshes() {
 
 
 void View::refresh() {
-    cam.update(shader);
+    cam.update(shader, sdfShader);
     SDL_GL_SwapWindow(window);
     glClearColor(0, 0, 0, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -116,12 +156,11 @@ void View::draw() {
     glViewport(0, 0, WIDTH, HEIGHT);
 
     glClearColor(0, 0, 0, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
     shader.activate();
 
-    Vec3 camPos = cam.getPos();
-    shader.putUniform("camPos", camPos.getX(), camPos.getY(), camPos.getZ());
+    
     for (Model3D* model : models) {
         model->draw(shader);
     }
@@ -129,15 +168,21 @@ void View::draw() {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glViewport(0, 0, WIDTH, HEIGHT);
 
-    glDisable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
     glDisable(GL_BLEND);
 
     sdfShader.activate();
 
+
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, color_buffer);
     sdfShader.putUniform("previousColor", 0);
+
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, depth_buffer);
+    sdfShader.putUniform("depthBuffer", 1);
+
+    glActiveTexture(GL_TEXTURE0);
 
     glDrawArrays(GL_TRIANGLES, 0, 6);
 

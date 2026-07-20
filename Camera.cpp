@@ -4,13 +4,21 @@
 
 Camera::Camera() {
 	transform = glm::mat4(1.0);
+	rotY = 0;
 }
 
-void Camera::update(Shader shader) {
-	shader.activate();
+void Camera::update(Shader shader, Shader shader2) {
 	glm::mat4 inverse = glm::inverse(transform);
+	Vec3 camPos = getPos();
+	shader.activate();
 	shader.putUniform("view", transform);
 	shader.putUniform("view_inv", inverse);
+	shader.putUniform("camPos", camPos.getX(), camPos.getY(), camPos.getZ());
+
+	shader2.activate();
+	shader2.putUniform("camPos", camPos.getX(), camPos.getY(), camPos.getZ());
+	shader2.putUniform("rotY", rotY);
+	shader2.putUniform("viewTransform", transform);
 }
 
 void Camera::translate(Vec3 v) {
@@ -24,6 +32,7 @@ void Camera::rotateX(float angle) {
 
 void Camera::rotateY(float angle) {
 	transform = glm::rotate(transform, glm::radians(angle), glm::vec3(0.0, 1.0, 0.0));
+	rotY += glm::radians(angle);
 }
 
 void Camera::rotateZ(float angle) {
