@@ -17,27 +17,9 @@ uniform int nbLights;
 uniform vec3 lightPos[10];
 uniform vec4 lightColor[10];
 
+uniform int nbWaterParticles;
+uniform vec3 waterParticles[1000];
 
-mat4 rotationX(float angle) {
-	return mat4(1, 0, 0, 0,
-				0, cos(angle), -sin(angle), 0,
-				0, sin(angle), cos(angle), 0,
-				0, 0, 0, 1);
-}
-
-mat4 rotationY(float angle) {
-	return mat4(cos(angle), 0, sin(angle), 0,
-				0, 1, 0, 0,
-				-sin(angle), 0, cos(angle), 0,
-				0, 0, 0, 1);
-}
-
-float sdSegment(vec3 p, vec3 a, vec3 b, float radius)
-{
-    vec3 pa = p-a, ba = b-a;
-    float h = clamp(dot(pa,ba)/dot(ba,ba), 0.0, 1.0);
-    return length(pa - ba*h) - radius;
-}
 
 float sdSphere(vec3 p, vec3 sphereCenter, float radius) {
 	return distance(sphereCenter, p) - radius;
@@ -48,10 +30,13 @@ float smin(float a, float b, float k) {
   return mix(a, b, h) - k*h*(1.0-h);
 }
 
-//float sdBox(vec3 p, vec3)
-
 float sdf(vec3 p) {
-	return smin(sdSphere(p, vec3(1, 0, -3), 1), sdSphere(p, vec3(2, 0, -1), 1), 1);
+	float res = 100000;
+	for (int i=0; i<1000 && i<nbWaterParticles; i++) {
+		vec3 offset = vec3(1, 0, -3);
+		res = smin(res, sdSphere(p, waterParticles[i] + offset, 0.1), 0.25);
+	}
+	return res;
 }
 
 vec3 gradient(vec3 p, float h) {

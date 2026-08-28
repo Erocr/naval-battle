@@ -15,6 +15,7 @@
 #include "Model3D.h"
 #include "Camera.h"
 #include "Light.h"
+#include "WaterSimulator.h"
 
 
 class View {
@@ -38,6 +39,7 @@ private:
 	GLuint depth_buffer;
 
 	Camera cam;
+	WaterSimulator waterSim;
 
 public:
 	View();
@@ -57,6 +59,10 @@ public:
 	void rotateCamY(float angle) { cam.rotateY(angle); }
 	void rotateCamZ(float angle) { cam.rotateZ(angle); }
 	void rotateCam(Vec3 angles) { cam.rotate(angles); }
+
+	void updateWaterSim() { waterSim.updateParticles(); }
+	void draw_density(Vec3 pos) { waterSim.draw_density(pos); }
+	Vec3 playerPos() { return cam.getPos(); }
 
 	void updateLights();
 	Light* addLight(Vec3 pos, Vec4 color);

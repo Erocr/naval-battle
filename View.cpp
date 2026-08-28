@@ -87,6 +87,8 @@ View::View() {
     assert(status == GL_FRAMEBUFFER_COMPLETE);
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    waterSim = WaterSimulator(7*7*7);
 }
 
 
@@ -152,6 +154,8 @@ void View::quit() {
 }
 
 void View::draw() {
+    waterSim.update();
+
     glBindFramebuffer(GL_FRAMEBUFFER, fbo1);
     glViewport(0, 0, WIDTH, HEIGHT);
 
@@ -173,6 +177,7 @@ void View::draw() {
 
     sdfShader.activate();
 
+    waterSim.putOnShader(sdfShader);
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, color_buffer);

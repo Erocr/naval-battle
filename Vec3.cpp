@@ -44,7 +44,8 @@ Vec3 Vec3::resize(float size) const { return normalize() * size; }
 
 
 float dist(const Vec3 v1, const Vec3 v2) { 
-	return std::sqrt(dot(v1, v2)); 
+	Vec3 v = v1 - v2;
+	return std::sqrt(dot(v, v)); 
 }
 float dot(const Vec3 v1, const Vec3 v2) { 
 	return v1.getX() * v2.getX() + v1.getY() * v2.getY() + v1.getZ() * v2.getZ(); 

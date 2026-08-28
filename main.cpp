@@ -18,16 +18,18 @@ int main(int argc, char* argv[]) {
         }, "triangle", "textures/wood-texture.png");
     auto sphereRef = view.loadMeshes("3d_models_raw/sphere/source/anim8or sphere.obj", "3d_models/teapot", "rat");
 
-    Model3D* sphere = view.addModel(sphereRef);
-    sphere->translate(Vec3(0, 0, -3));
-    sphere->scale(3/2);
+    //Model3D* sphere = view.addModel(sphereRef);
+    //sphere->translate(Vec3(0, 0, -3));
+    //sphere->scale(3/2);
 
-    view.addLight(Vec3(0, 0, 0), Vec4(1, 0, 0, 1));
+    view.addLight(Vec3(0, 0, 0), Vec4(1, 1, 1, 1));
     view.finalizeMeshes();
     std::cout << "finished" << std::endl;
 
 
     size_t i = 0;
+    bool prev_scan_code_u = false;
+    bool prev_scan_code_i = false;
 
     while (!inputs.is_quiting()) {
         auto start = std::chrono::system_clock::now();
@@ -40,6 +42,7 @@ int main(int argc, char* argv[]) {
 
         inputs.update();
 
+        // Translations
         if (inputs.is_pressed(SDL_SCANCODE_W)) {
             view.translateCam(Vec3(0, 0, -0.02));
         } if (inputs.is_pressed(SDL_SCANCODE_S)) {
@@ -48,11 +51,28 @@ int main(int argc, char* argv[]) {
             view.translateCam(Vec3(-0.02, 0, 0));
         } if (inputs.is_pressed(SDL_SCANCODE_D)) {
             view.translateCam(Vec3(0.02, 0, 0));
-        } if (inputs.is_pressed(SDL_SCANCODE_Q)) {
+        } if (inputs.is_pressed(SDL_SCANCODE_LSHIFT)) {
+            view.translateCam(Vec3(0, -0.02, 0));
+        } if (inputs.is_pressed(SDL_SCANCODE_SPACE)) {
+            view.translateCam(Vec3(0, 0.02, 0));
+        } 
+        
+        // Rotations
+        if (inputs.is_pressed(SDL_SCANCODE_Q)) {
             view.rotateCamY(1);
         } if (inputs.is_pressed(SDL_SCANCODE_E)) {
             view.rotateCamY(-1);
+        } 
+        
+        // Debug
+        if (!prev_scan_code_u && inputs.is_pressed(SDL_SCANCODE_U)) {
+            view.updateWaterSim();
         }
+        if (!prev_scan_code_i && inputs.is_pressed(SDL_SCANCODE_I)) {
+            view.draw_density(view.playerPos());
+        }
+        prev_scan_code_u = inputs.is_pressed(SDL_SCANCODE_U);
+        prev_scan_code_i = inputs.is_pressed(SDL_SCANCODE_I);
 
         view.draw();
 
