@@ -88,14 +88,16 @@ View::View() {
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-    waterSim = WaterSimulator(7*7*7);
+    std::cout << "bfore water sim" << std::endl;
+    waterSim = WaterSimulator(500);
+    std::cout << "after water sim" << std::endl;
 }
-
+ 
 
 void View::updateLights() {
     std::vector<Vec3> lightPos = std::vector<Vec3>(0);
     std::vector<Vec4> lightCol = std::vector<Vec4>(0);
-    for (Light light : lights) {
+    for (Light &light : lights) {
         lightPos.push_back(light.pos);
         lightCol.push_back(light.color);
     }

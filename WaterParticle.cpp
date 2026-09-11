@@ -2,8 +2,8 @@
 
 #include <iostream>
 
-const float WaterParticle::GRAVITY = 0.01;
-const float WaterParticle::FRICTION = 1;// 0.99;
+const float WaterParticle::GRAVITY = 0.005;
+const float WaterParticle::FRICTION = 0.98;
 
 
 WaterParticle::WaterParticle(Vec3 pos) {
@@ -20,7 +20,7 @@ WaterParticle::WaterParticle(Vec3 pos) {
 
 void WaterParticle::computePressure() {
 	float TARGET_DENSITY = 1;
-	float PRESSURE_MULTIPLIER = 0.0003f;
+	float PRESSURE_MULTIPLIER = 0.02f;
 	// The pressure is how much he must get close to other particles
 	pressure = -(density - TARGET_DENSITY) * PRESSURE_MULTIPLIER;
 }

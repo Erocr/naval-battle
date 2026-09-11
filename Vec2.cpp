@@ -15,6 +15,9 @@ Vec2 Vec2::operator*(Vec2 other) const  { return Vec2(x * other.getX(), y * othe
 Vec2 Vec2::operator*(float other) const { return Vec2(x * other, y * other); }
 Vec2 Vec2::operator/(Vec2 other) const { return Vec2(x / other.getX(), y / other.getY()); }
 Vec2 Vec2::operator/(float other) const { return Vec2(x / other, y / other); }
+std::ostream& operator<<(std::ostream& os, const Vec2& vec) {
+	return os << '(' << vec.getX() << ", " << vec.getY() << ')';
+}
 
 
 float Vec2::norm() const { return x * x + y * y; }

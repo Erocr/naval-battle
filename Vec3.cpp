@@ -36,6 +36,9 @@ void Vec3::operator+=(Vec3 other) {
 	y = y + other.getY();
 	z = z + other.getZ();
 }
+std::ostream& operator<<(std::ostream& os, const Vec3& vec) {
+	return os << '(' << vec.getX() << ", " << vec.getY() << ", " << vec.getZ() << ')';
+}
 
 
 float Vec3::norm() const { return x * x + y * y + z * z; }

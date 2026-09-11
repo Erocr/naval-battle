@@ -18,7 +18,7 @@ uniform vec3 lightPos[10];
 uniform vec4 lightColor[10];
 
 uniform int nbWaterParticles;
-uniform vec3 waterParticles[1000];
+uniform vec3 waterParticles[500];
 
 
 float sdSphere(vec3 p, vec3 sphereCenter, float radius) {
@@ -32,7 +32,7 @@ float smin(float a, float b, float k) {
 
 float sdf(vec3 p) {
 	float res = 100000;
-	for (int i=0; i<1000 && i<nbWaterParticles; i++) {
+	for (int i=0; i<500 && i<nbWaterParticles; i++) {
 		vec3 offset = vec3(1, 0, -3);
 		res = smin(res, sdSphere(p, waterParticles[i] + offset, 0.1), 0.25);
 	}

@@ -1,5 +1,5 @@
 #pragma once
-
+#include <iostream>
 
 class Vec2 {
 private:
@@ -21,6 +21,7 @@ public:
 	Vec2 operator*(float other) const;
 	Vec2 operator/(Vec2 other) const;
 	Vec2 operator/(float other) const;
+	friend std::ostream& operator<<(std::ostream& os, const Vec2& vec);
 
 
 	// usefull functions

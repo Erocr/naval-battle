@@ -38,6 +38,9 @@ void Vec4::operator+=(Vec4 other) {
 	z = z + other.getZ();
 	w = w + other.getW();
 }
+std::ostream& operator<<(std::ostream& os, const Vec4& vec) {
+	return os << '(' << vec.getX() << ", " << vec.getY() << ", " << vec.getZ() << ", " << vec.getW() << ')';
+}
 
 
 float Vec4::norm() const { return x * x + y * y + z * z + w * w; }
